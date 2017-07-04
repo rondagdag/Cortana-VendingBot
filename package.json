@@ -26,6 +26,7 @@
     "botbuilder": "^3.8.2",
     "dotenv-extended": "^1.0.4",
     "lodash": "^4.17.4",
+    "node-grovepi": "^2.1.1",
     "restify": "^4.3.1",
     "stripe": "^4.15.1",
     "uuid": "^3.0.1"

@@ -1,7 +1,6 @@
 var GrovePi = require('node-grovepi').GrovePi
 
 var relay = new GrovePi.sensors.DigitalOutput(4);
-var led = new GrovePi.sensors.DigitalOutput(3);
 
 // This loads the environment variables from the .env file
 require('dotenv-extended').load();
@@ -259,8 +258,7 @@ function cleanupConversationData(session) {
 function dispense() {
   console.log('Dispense Candy');
   relay.turnOn();
-  led.turnOn();
-  setTimeout(function() { relay.turnOff(); led.turnOff(); }, 5000 );
+  setTimeout(function() { relay.turnOff() }, 50000 );
 }
 
 var board;
