@@ -19,17 +19,18 @@ function validateAndCalculateDetails(paymentRequest, shippingAddress, selectedSh
             if (products.length === 0) {
                 throw new Error('Product not available');
             }
-
+            if (shippingAddress) {
             // get available shipping methods for address and validate
-            var shippingMethods = getShippingMethodsForAddress(shippingAddress);
-            var selectedShippingMethod = shippingMethods.find(o => o.id === selectedShippingOption);
-            if (!selectedShippingMethod && shippingMethods.length > 0) {
-                // preselect first option if none is found
-                selectedShippingMethod = shippingMethods[0];
-            }
+                var shippingMethods = getShippingMethodsForAddress(shippingAddress);
+                var selectedShippingMethod = shippingMethods.find(o => o.id === selectedShippingOption);
+                if (!selectedShippingMethod && shippingMethods.length > 0) {
+                    // preselect first option if none is found
+                    selectedShippingMethod = shippingMethods[0];
+                }
 
-            if (selectedShippingMethod) {
-                selectedShippingMethod.selected = true;
+                if (selectedShippingMethod) {
+                    selectedShippingMethod.selected = true;
+                }
             }
 
             // details
@@ -39,7 +40,7 @@ function validateAndCalculateDetails(paymentRequest, shippingAddress, selectedSh
                     amount: { currency: 'USD', value: '0.00' }
                 },
                 displayItems: products.map(asDisplayItem)
-                    .concat([
+                    .concat(shippingAddress ? [
                         {
                             label: 'Shipping',
                             amount: { currency: 'USD', value: '0.00' },
@@ -48,7 +49,7 @@ function validateAndCalculateDetails(paymentRequest, shippingAddress, selectedSh
                             label: 'Sales Tax',
                             amount: { currency: 'USD', value: '0.00' },
                             pending: true
-                        }]),
+                        }] : []),
                 shippingOptions: shippingMethods
             };
 
@@ -182,10 +183,13 @@ function recalculateTaxAndTotal(details, shippingAddress, shippingOption) {
         .reduce((a, b) => a + parseFloat(b.amount.value), 0);
     var taxItem = details.displayItems.find(i => i.label === 'Sales Tax');
 
+    
     // only for US
-    var tax = shippingAddress.country.toLowerCase() === 'us' ? subTotal * 0.085 : 0;
-    taxItem.amount.value = tax.toFixed(2);
-    taxItem.pending = false;
+    if (shippingAddress) {
+        var tax = shippingAddress.country.toLowerCase() === 'us' ? subTotal * 0.085 : 0;
+        taxItem.amount.value = tax.toFixed(2);
+        taxItem.pending = false;
+    }
 
     // new total
     details.total.amount.value = details.displayItems

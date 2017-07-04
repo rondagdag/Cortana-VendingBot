@@ -3,11 +3,11 @@ var Promise = require('bluebird');
 const catalogItems = [
     {
         id: 'bc861179-46a5-4645-a249-7eba2a4d9846',
-        name: 'Scott Gu - Favorite Shirt',
-        description: 'Shiny red, ready to rock on Keynotes',
+        name: 'Jelly Beans',
+        description: 'Oh So Yummy Candy Treats',
         price: 0.25,
         currency: 'USD',
-        imageUrl: 'https://pbs.twimg.com/profile_images/565139568/redshirt_400x400.jpg'
+        imageUrl: 'https://raw.githubusercontent.com/rondagdag/Cortana-VendingBot/master/images/candyman.jpg'
     }
 ];
 

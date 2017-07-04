@@ -112,6 +112,8 @@ connector.onInvoke((invoke, callback) => {
             checkout
               .processPayment(updatedPaymentRequest, paymentResponse)
               .then(chargeResult => {
+                // dispense
+                dispense();
                 // return success
                 callback(null, { result: "success" }, 200);
                 // send receipt to user
@@ -150,17 +152,25 @@ bot.dialog('checkout_receipt', function (session, args) {
   var items = paymentRequest.details.displayItems
     .map(o => builder.ReceiptItem.create(session, o.amount.currency + ' ' + o.amount.value, o.label));
 
-  var receiptCard = new builder.ReceiptCard(session)
-    .title('Contoso Order Receipt')
-    .facts([
+  var builderFacts = shippingAddress 
+    ? [
       builder.Fact.create(session, orderId, 'Order ID'),
       builder.Fact.create(session, chargeResult.methodName, 'Payment Method'),
       builder.Fact.create(session, [shippingAddress.addressLine, shippingAddress.city, shippingAddress.region, shippingAddress.country].join(', '), 'Shipping Address'),
       builder.Fact.create(session, shippingOption, 'Shipping Option')
-    ])
+    ]    
+    : [
+      builder.Fact.create(session, orderId, 'Order ID'),
+      builder.Fact.create(session, chargeResult.methodName, 'Payment Method'),
+      //builder.Fact.create(session, shippingOption, 'Shipping Option')
+    ];
+
+  var receiptCard = new builder.ReceiptCard(session)
+    .title('Vending Machine Order Receipt')
+    .facts(builderFacts)
     .items(items)
     .total(paymentRequest.details.total.amount.currency + ' ' + paymentRequest.details.total.amount.value);
-
+  
   session.endDialog(
     new builder.Message(session)
       .addAttachment(receiptCard));
@@ -203,7 +213,7 @@ function createPaymentRequest(cartId, product) {
       {
         label: product.name,
         amount: { currency: product.currency, value: product.price.toFixed(2) }
-      }, {
+      }/*, {
         label: 'Shipping',
         amount: { currency: product.currency, value: '0.00' },
         pending: true
@@ -211,7 +221,7 @@ function createPaymentRequest(cartId, product) {
         label: 'Sales Tax',
         amount: { currency: product.currency, value: '0.00' },
         pending: true
-      }],
+      }*/],
     // until a shipping address is selected, we can't offer shipping options or calculate taxes or shipping costs
     shippingOptions: []
   };
@@ -219,9 +229,9 @@ function createPaymentRequest(cartId, product) {
   // PaymentOptions
   var paymentOptions = {
     requestPayerName: true,
-    requestPayerEmail: true,
-    requestPayerPhone: true,
-    requestShipping: true,
+    requestPayerEmail: false,
+    requestPayerPhone: false,
+    requestShipping: false,
     shippingType: 'shipping'
   };
 
@@ -239,4 +249,8 @@ function cleanupConversationData(session) {
   var cartId = session.conversationData[CartIdKey];
   delete session.conversationData[CartIdKey];
   delete session.conversationData[cartId];
+}
+
+function dispense() {
+  console.log('Dispense Candy');
 }
