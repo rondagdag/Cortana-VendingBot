@@ -1,11 +1,11 @@
 {
-  "name": "botbuilder-sample-payments",
+  "name": "Cortana Vending Bot",
   "version": "1.0.0",
-  "description": "Bot Builder Sample - Payments",
+  "description": "Cortana Vending Bot",
   "scripts": {
     "start": "node app.js"
   },
-  "author": "Microsoft Corp.",
+  "author": "Ron Dagdag",
   "license": "MIT",
   "keywords": [
     "botbuilder",
@@ -14,11 +14,11 @@
     "botbuilder-samples"
   ],
   "bugs": {
-    "url": "https://github.com/Microsoft/BotBuilder-Samples/issues"
+    "url": "https://github.com/rondagdag/Cortana-VendingBot/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Microsoft/BotBuilder-Samples.git"
+    "url": "https://github.com/rondagdag/Cortana-VendingBot.git"
   },
   "dependencies": {
     "base64url": "^2.0.0",
