@@ -1,5 +1,7 @@
 Checkout detailed instructions <a href="https://www.hackster.io/RONDAGDAG/diy-vending-machine-with-cortana-skills-and-bot-framework-86920d">DIY Vending Machine With Cortana Skills and Bot Framework</a>
 
+https://www.hackster.io/RONDAGDAG/diy-vending-machine-with-cortana-skills-and-bot-framework-86920d
+
 # Payment Bot Sample
 
 A sample bot showing how to integrate with Microsoft Seller Center for payment processing.
